@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Responsive User Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f2f2f2;
+    }
+
+    h2, h3 { color: #333; }
+
+    #addUserSection, #searchSection {
+      margin-bottom: 15px;
+    }
+
+    #addUserSection input, #searchSection input {
+      padding: 5px;
+      margin-right: 5px;
+    }
+
+    #addUserSection button {
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #userList {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .user-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      width: 200px;
+      position: relative;
+    }
+
+    .user-card h4 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+    }
+
+    .user-card p {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .user-card button {
+      padding: 5px 10px;
+      margin-right: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 12px;
+    }
+
+    .edit-btn { background-color: #2196F3; }
+    .delete-btn { background-color: #f44336; }
+
+    /* Modal styles */
+    .modal {
+      display: none; 
+      position: fixed; 
+      z-index: 100; 
+      left: 0; top: 0; 
+      width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.5);
+      justify-content: center; 
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .modal-content input {
+      width: 80%;
+      padding: 5px;
+      margin: 10px 0;
+    }
+
+    .modal-content button {
+      padding: 5px 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .save-btn { background-color: #4CAF50; }
+    .cancel-btn { background-color: #f44336; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      #userList { flex-direction: column; align-items: center; }
+      .user-card { width: 90%; }
+      #addUserSection input, #searchSection input { width: 100%; margin-bottom: 5px; }
+      #addUserSection button { width: 100%; margin-bottom: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Users</h2>
+
+  <!-- Search bar -->
+  <div id="searchSection">
+    <input type="text" id="searchInput" placeholder="Search users..." oninput="filterUsers()">
+  </div>
+
+  <!-- Add user -->
+  <div id="addUserSection">
+    <input type="text" id="name" placeholder="Name">
+    <input type="email" id="email" placeholder="Email">
+    <button onclick="addUser()">Add</button>
+  </div>
+
+  <!-- User cards -->
+  <div id="userList"></div>
+
+  <!-- Edit modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <h3>Edit User</h3>
+      <input type="text" id="editName" placeholder="Name">
+      <input type="email" id="editEmail" placeholder="Email">
+      <div>
+        <button class="save-btn" onclick="saveEdit()">Save</button>
+        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "http://localhost:8080/api/users";
+    let editingUserId = null;
+    let allUsers = [];
+
+    async function loadUsers() {
+      try {
+        const res = await fetch(API_URL);
+        allUsers = await res.json();
+        displayUsers(allUsers);
+      } catch (err) {
+        console.error("Error loading users:", err);
+      }
+    }
+
+    function displayUsers(users) {
+      const list = document.getElementById("userList");
+      list.innerHTML = "";
+      users.forEach(user => {
+        const card = document.createElement("div");
+        card.className = "user-card";
+
+        const nameEl = document.createElement("h4");
+        nameEl.textContent = user.name;
+        const emailEl = document.createElement("p");
+        emailEl.textContent = user.email;
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.className = "edit-btn";
+        editBtn.onclick = () => openEditModal(user);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.onclick = () => deleteUser(user.id);
+
+        card.appendChild(nameEl);
+        card.appendChild(emailEl);
+        card.appendChild(editBtn);
+        card.appendChild(deleteBtn);
+
+        list.appendChild(card);
+      });
+    }
+
+    async function addUser() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      if (!name || !email) { alert("Please enter name and email"); return; }
+
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email })
+        });
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        loadUsers();
+      } catch (err) {
+        console.error("Error adding user:", err);
+      }
+    }
+
+    function openEditModal(user) {
+      editingUserId = user.id;
+      document.getElementById("editName").value = user.name;
+      document.getElementById("editEmail").value = user.email;
+      document.getElementById("editModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("editModal").style.display = "none";
+      editingUserId = null;
+    }
+
+    async function saveEdit() {
+      const newName = document.getElementById("editName").value;
+      const newEmail = document.getElementById("editEmail").value;
+      if (!newName || !newEmail) { alert("Both name and email are required!"); return; }
+
+      try {
+        await fetch(`${API_URL}/${editingUserId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: newName, email: newEmail })
+        });
+        closeModal();
+        loadUsers();
+      } catch (err) {
+        console.error("Error updating user:", err);
+      }
+    }
+
+    async function deleteUser(id) {
+      try {
+        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        loadUsers();
+      } catch (err) {
+        console.error("Error deleting user:", err);
+      }
+    }
+
+    function filterUsers() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = allUsers.filter(user =>
+        user.name.toLowerCase().includes(query) ||
+        user.email.toLowerCase().includes(query)
+      );
+      displayUsers(filtered);
+    }
+
+    loadUsers();
+  </script>
+</body>
+</html>

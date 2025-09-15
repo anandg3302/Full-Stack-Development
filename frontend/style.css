@@ -1,0 +1,114 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 50px;
+}
+
+.container {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 350px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Input Group */
+.input-group {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#todoInput {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+#todoInput:focus {
+    border-color: #6c63ff;
+}
+
+#addBtn {
+    padding: 10px 15px;
+    border: none;
+    background-color: #6c63ff;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 0 8px 8px 0;
+    transition: 0.3s;
+}
+
+#addBtn:hover {
+    background-color: #574fcf;
+}
+
+/* Task Counter */
+#taskCount {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Task List */
+#todoList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#todoList li {
+    background: #f9f9f9;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: 0.2s;
+}
+
+#todoList li.completed {
+    text-decoration: line-through;
+    color: #999;
+    opacity: 0.7;
+}
+
+/* Checkbox */
+#todoList li input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+/* Delete Button */
+#todoList li button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-left: 15px;
+}
+
+#todoList li button:hover {
+    background-color: #ff1a1a;
+}

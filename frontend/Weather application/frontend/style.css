@@ -1,0 +1,112 @@
+/* --- Global Styles --- */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #74ebd5, #9face6);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+/* --- Main Section --- */
+section {
+  background: #fff;
+  margin-top: 60px;
+  padding: 30px 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 400px;
+  max-width: 90%;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.6rem;
+}
+
+/* --- Form --- */
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 6px rgba(74, 144, 226, 0.4);
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  background: #4a90e2;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+
+button:hover {
+  background: #357ab7;
+}
+
+/* --- Weather Card --- */
+.weather-card {
+  background: #f9f9f9;
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.weather-card h3 {
+  margin-top: 0;
+  color: #222;
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.weather-card p {
+  margin: 6px 0;
+  font-size: 1rem;
+}
+
+.label {
+  font-weight: bold;
+  color: #444;
+}
+
+.value {
+  color: #2c3e50;
+  margin-left: 5px;
+}
+
+/* --- Status Messages --- */
+.loading {
+  color: #555;
+  font-style: italic;
+}
+
+.error {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-top: 15px;
+}
